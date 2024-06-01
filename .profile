@@ -18,6 +18,9 @@ fi
 
 alias c='clear'
 alias vim='nvim'
+alias la='ls -a'
+alias ll='ls -l'
+alias lla='ls -la'
 
 export EDITOR="nvim"
 export SHELL="zsh"
