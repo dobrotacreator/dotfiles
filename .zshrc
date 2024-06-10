@@ -48,6 +48,10 @@ zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 # eval "$(fzf --zsh)"
 # eval "$(zoxide init --cmd cd zsh)"
 
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+if command -v tmux &> /dev/null \
+    && [ -n "$PS1" ] \
+    && [[ ! "$TERM" =~ screen ]] \
+    && [[ ! "$TERM" =~ tmux ]] \
+    && [ -z "$TMUX" ]; then
   exec tmux
 fi

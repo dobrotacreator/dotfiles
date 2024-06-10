@@ -1,3 +1,0 @@
-return {
-    "zefei/vim-colortuner",
-}

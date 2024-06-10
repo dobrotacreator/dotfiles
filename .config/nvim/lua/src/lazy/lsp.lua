@@ -18,13 +18,10 @@ return {
 				map("gd", require("telescope.builtin").lsp_definitions)
 				map("gr", require("telescope.builtin").lsp_references)
 				map("gi", require("telescope.builtin").lsp_implementations)
-				map("<leader>td", require("telescope.builtin").lsp_type_definitions)
-				map("<leader>ds", require("telescope.builtin").lsp_document_symbols)
-				map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols)
+				map("gD", vim.lsp.buf.declaration)
 				map("<leader>rn", vim.lsp.buf.rename)
 				map("<leader>ca", vim.lsp.buf.code_action)
 				map("K", vim.lsp.buf.hover)
-				map("gD", vim.lsp.buf.declaration)
 
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
 				if client and client.server_capabilities.documentHighlightProvider then
@@ -58,7 +55,7 @@ return {
 				end
 
 				if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-					map("<leader>th", function()
+					map("<leader>ih", function()
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 					end)
 				end
