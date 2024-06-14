@@ -54,7 +54,7 @@ return {
 					})
 				end
 
-				if client and client.name == "ruff_lsp" then
+				if client and (client.name == "ruff_lsp" or client.name == "pyright") then
 					vim.api.nvim_create_autocmd("BufWritePre", {
 						callback = function()
 							if vim.bo.ft == "python" then
