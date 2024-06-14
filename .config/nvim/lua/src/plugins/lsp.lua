@@ -54,6 +54,33 @@ return {
 					})
 				end
 
+				if client and client.name == "ruff_lsp" then
+					vim.api.nvim_create_autocmd("BufWritePre", {
+						callback = function()
+							if vim.bo.ft == "python" then
+								vim.lsp.buf.code_action({
+									context = {
+										diagnostics = {},
+										only = { "source.fixAll.ruff" },
+									},
+									apply = true,
+								})
+							end
+						end,
+					})
+					map("<space>ca", function()
+						vim.lsp.buf.code_action({
+							context = {
+								diagnostics = {},
+								only = {
+									"source.organizeImports",
+								},
+							},
+							apply = true,
+						})
+					end)
+				end
+
 				if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
 					map("<leader>ih", function()
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
