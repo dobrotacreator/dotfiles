@@ -21,6 +21,7 @@ return {
 				map("gD", vim.lsp.buf.declaration)
 				map("<leader>rn", vim.lsp.buf.rename)
 				map("<leader>ca", vim.lsp.buf.code_action)
+				map("<leader>sh", vim.lsp.buf.signature_help)
 				map("K", vim.lsp.buf.hover)
 
 				local client = vim.lsp.get_client_by_id(event.data.client_id)
