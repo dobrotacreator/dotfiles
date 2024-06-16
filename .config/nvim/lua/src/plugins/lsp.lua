@@ -100,6 +100,7 @@ return {
 			clangd = {
 				filetypes = { "c", "cpp", "objc", "objcpp" },
 			},
+			glslls = {},
 			gopls = {},
 			pyright = {},
 			ruff_lsp = {},
