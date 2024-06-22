@@ -73,7 +73,9 @@ return {
 			clangd = {
 				filetypes = { "c", "cpp", "objc", "objcpp" },
 			},
-			glslls = {},
+			glslls = {
+				cmd = { "glslls", "--stdin", "--target-env=opengl" },
+			},
 			gopls = {},
 			pyright = {},
 			ruff_lsp = {},
