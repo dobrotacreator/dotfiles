@@ -1,3 +1,5 @@
+[[ -r ~/.profile ]] && emulate sh -c 'source ~/.profile'
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,8 +7,6 @@
 #   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-[[ -r ~/.profile ]] && emulate sh -c 'source ~/.profile'
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 if [ ! -d "$ZINIT_HOME" ]; then
@@ -22,6 +22,7 @@ zinit light zsh-users/zsh-autosuggestions
 autoload -Uz compinit && compinit
 zinit cdreplay -q
 
+bindkey -v
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
