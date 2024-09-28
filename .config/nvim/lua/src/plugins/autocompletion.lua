@@ -24,22 +24,29 @@ return {
 					luasnip.lsp_expand(args.body)
 				end,
 			},
-			completion = { completeopt = "menu,menuone,noinsert" },
+
+			completion = { completeopt = "menu,preview,menuone,noinsert,noselect" },
 			mapping = cmp.mapping.preset.insert({
 				["<C-n>"] = cmp.mapping.select_next_item(),
 				["<C-p>"] = cmp.mapping.select_prev_item(),
 				["<C-u>"] = cmp.mapping.scroll_docs(-4),
 				["<C-d>"] = cmp.mapping.scroll_docs(4),
-				["<CR>"] = cmp.mapping.confirm({ select = true }),
-				["<C-Space>"] = cmp.mapping.complete({}),
-				["<C-l>"] = cmp.mapping(function()
+				["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                ['<C-e>'] = cmp.mapping.close(),
+				["<Tab>"] = cmp.mapping.complete({}),
+				["<C-L>"] = cmp.mapping(function()
 					if luasnip.expand_or_locally_jumpable() then
 						luasnip.expand_or_jump()
 					end
 				end, { "i", "s" }),
-				["<C-h>"] = cmp.mapping(function()
+				["<C-H>"] = cmp.mapping(function()
 					if luasnip.locally_jumpable(-1) then
 						luasnip.jump(-1)
+					end
+				end, { "i", "s" }),
+				["<C-E>"] = cmp.mapping(function()
+					if luasnip.choice_active() then
+						luasnip.change_choice(1)
 					end
 				end, { "i", "s" }),
 			}),

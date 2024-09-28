@@ -1,8 +1,18 @@
+vim.cmd([[
+    au ColorScheme * hi! MatchParen guibg=#3b3836
+]])
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Highlight when yanking (copying) text",
+	group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+
 vim.g.have_nerd_font = true
 
--- vim.g.netrw_browse_split = 0
--- vim.g.netrw_banner = 0
--- vim.g.netrw_winsize = 25
+vim.g.netrw_banner = 0
 
 vim.opt.termguicolors = true
 
@@ -24,6 +34,16 @@ vim.opt.breakindent = true
 
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
+vim.opt.directory = os.getenv("HOME") .. "/.vim/swapdir"
+vim.opt.swapfile = true
+vim.opt.backupdir = os.getenv("HOME") .. "/.vim/backupdir"
+vim.opt.backup = true
+vim.api.nvim_create_autocmd("BufWritePre", {
+	callback = function()
+		local extension = "~" .. vim.fn.strftime("%Y-%m-%d-%H%M%S")
+		vim.o.backupext = extension
+	end,
+})
 
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
