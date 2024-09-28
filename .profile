@@ -22,6 +22,7 @@ alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -la'
 
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:/usr/lib/dart/bin"

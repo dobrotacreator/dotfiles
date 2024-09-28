@@ -7,42 +7,6 @@ duration = 0
 [colors]
 draw_bold_text_with_bright_colors = true
 
-# [[colors.indexed_colors]]
-# color = "0xF8BD96"
-# index = 16
-#
-# [[colors.indexed_colors]]
-# color = "0xF5E0DC"
-# index = 17
-#
-# [colors.bright]
-# black = "0x988BA2"
-# blue = "0x96CDFB"
-# cyan = "0x89DCEB"
-# green = "0xABE9B3"
-# magenta = "0xF5C2E7"
-# red = "0xF28FAD"
-# white = "0xD9E0EE"
-# yellow = "0xFAE3B0"
-#
-# [colors.cursor]
-# cursor = "0xF5E0DC"
-# text = "0x1E1D2F"
-#
-# [colors.normal]
-# black = "0x6E6C7E"
-# blue = "0x96CDFB"
-# cyan = "0x89DCEB"
-# green = "0xABE9B3"
-# magenta = "0xF5C2E7"
-# red = "0xF28FAD"
-# white = "0xD9E0EE"
-# yellow = "0xFAE3B0"
-#
-# [colors.primary]
-# background = "0x1E1D2F"
-# foreground = "0xD9E0EE"
-
 [cursor]
 blink_interval = 500
 blink_timeout = 5
@@ -53,7 +17,7 @@ blinking = "Off"
 shape = "Block"
 
 [font]
-size = 15
+size = 18
 
 [font.normal]
 family = "RobotoMono Nerd Font"
@@ -101,3 +65,34 @@ lines = 24
 [window.padding]
 x = 4
 y = 4
+
+[keyboard]
+bindings = [
+  { key = "Slash", mods = "Control", chars = "\u001f" },
+  { key = "E", mods = "Command", chars = "\u0002\"" },  # split tmux window vertically
+  { key = "E", mods = "Command|Shift", chars = "\u0002%" },  # split tmux window horizontally
+  { key = "F", mods = "Command|Shift", chars = "\u0002\u005b\u002f" },  # start tmux search mode
+  { key = "K", mods = "Command", chars = "\u0002s" },  # open interactive tmux session client
+  { key = "L", mods = "Command", chars = "\u0002L" },  # switch to the last tmux session
+  { key = "S", mods = "Command", chars = "\u001b\u003a\u0077\u000a" },  # save vim buffer
+  { key = "T", mods = "Command", chars = "\u0002c" },  # create a new tmux window
+  { key = "W", mods = "Command", chars = "\u0002x" },  # kill the current pane
+  { key = "Z", mods = "Command", chars = "\u0002z" },  # toggle zoom state of the current tmux pane
+  { key = "Tab", mods = "Control", chars = "\u0002n" },  # switch to next tmux window
+  { key = "`", mods = "Control", chars = "\u0002p" },  # switch to previous tmux window
+  { key = "Comma", mods = "Command", chars = "\u0002," },  # rename the current tmux window
+  { key = "LBracket", mods = "Command", chars = "\u000f" },  # navigate back in vim (ctrl+o)
+  { key = "LBracket", mods = "Command|Shift", chars = "\u0002p" },  # switch to next tmux window
+  { key = "RBracket", mods = "Command", chars = "\u0009" },  # navigate forward in vim (ctrl+i)
+  { key = "RBracket", mods = "Command|Shift", chars = "\u0002n" },  # switch to previous tmux window
+  { key = "Semicolon", mods = "Command", chars = "\u0002:" },  # enter the tmux command prompt
+  { key = "Key1", mods = "Command", chars = "\u00021" },  # select tmux window 1
+  { key = "Key2", mods = "Command", chars = "\u00022" },  #                ... 2
+  { key = "Key3", mods = "Command", chars = "\u00023" },  #                ... 3
+  { key = "Key4", mods = "Command", chars = "\u00024" },  #                ... 4
+  { key = "Key5", mods = "Command", chars = "\u00025" },  #                ... 5
+  { key = "Key6", mods = "Command", chars = "\u00026" },  #                ... 6
+  { key = "Key7", mods = "Command", chars = "\u00027" },  #                ... 7
+  { key = "Key8", mods = "Command", chars = "\u00028" },  #                ... 8
+  { key = "Key9", mods = "Command", chars = "\u00029" },  #                ... 9
+]
