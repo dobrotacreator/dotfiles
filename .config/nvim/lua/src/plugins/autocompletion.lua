@@ -12,6 +12,14 @@ return {
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-cmdline",
+		{
+			"MattiasMTS/cmp-dbee",
+			dependencies = {
+				{ "kndndrj/nvim-dbee" },
+			},
+			ft = "sql", -- optional but good to have
+			opts = {}, -- needed
+		},
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -25,15 +33,15 @@ return {
 				end,
 			},
 
-			completion = { completeopt = "menu,preview,menuone,noinsert,noselect" },
+			completion = { completeopt = "menu,preview,menuone,noinsert" },
 			mapping = cmp.mapping.preset.insert({
 				["<C-n>"] = cmp.mapping.select_next_item(),
 				["<C-p>"] = cmp.mapping.select_prev_item(),
 				["<C-u>"] = cmp.mapping.scroll_docs(-4),
 				["<C-d>"] = cmp.mapping.scroll_docs(4),
 				["<CR>"] = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-                ['<C-e>'] = cmp.mapping.close(),
-				["<Tab>"] = cmp.mapping.complete({}),
+				["<C-e>"] = cmp.mapping.close(),
+				["<S-Tab>"] = cmp.mapping.complete({}),
 				["<C-L>"] = cmp.mapping(function()
 					if luasnip.expand_or_locally_jumpable() then
 						luasnip.expand_or_jump()
@@ -54,6 +62,14 @@ return {
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
 				{ name = "path" },
+				{ name = "buffer" },
+			},
+		})
+		cmp.setup.filetype({ "sql" }, {
+			sources = {
+				{ name = "cmp-dbee" },
+				{ name = "luasnip" },
+				{ name = "buffer" },
 			},
 		})
 

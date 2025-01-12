@@ -27,8 +27,6 @@ export PATH="$PATH:/opt/nvim-linux64/bin"
 export PATH="$PATH:/usr/local/go/bin"
 export PATH="$PATH:/usr/lib/dart/bin"
 
-export TERMINAL=/usr/bin/alacritty
-
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"

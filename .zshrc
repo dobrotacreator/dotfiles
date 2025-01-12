@@ -56,3 +56,36 @@ if command -v tmux &> /dev/null \
     && [ -z "$TMUX" ]; then
   exec tmux
 fi
+
+cntnt() {
+    local targets=("$@")
+
+    local target_paths=()
+    local ignore_patterns=()
+    local processing_ignores=false
+
+    for arg in "${targets[@]}"; do
+        if [[ "$arg" == "--ignore" ]]; then
+            processing_ignores=true
+            continue
+        fi
+
+        if $processing_ignores; then
+            ignore_patterns+=("$arg")
+        else
+            target_paths+=("$arg")
+        fi
+    done
+
+    local find_command=(find)
+    for p in "${target_paths[@]}"; do
+        find_command+=("$p")
+    done
+    find_command+=("-type" "f")
+
+    for pattern in "${ignore_patterns[@]}"; do
+        find_command+=("-not" "-path" "$pattern")
+    done
+
+    "${find_command[@]}" -exec sh -c 'echo "=== {} ==="; cat "{}"; echo "\n\n"' \; > ./cntnt.txt
+}

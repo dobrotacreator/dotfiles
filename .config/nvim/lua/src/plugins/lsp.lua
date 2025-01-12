@@ -30,6 +30,9 @@ return {
 						vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 					end)
 				end
+				if client and client.name == "clangd" then
+					map("gh", "<cmd>ClangdSwitchSourceHeader<CR>")
+				end
 			end,
 		})
 
@@ -43,9 +46,24 @@ return {
 			glslls = {
 				cmd = { "glslls", "--stdin", "--target-env=opengl" },
 			},
-			gopls = {},
-			pyright = {},
-			ruff_lsp = {},
+			pyright = {
+				settings = {
+					python = {
+						analysis = {
+							diagnosticMode = "workspace",
+							typeCheckingMode = "basic",
+						},
+					},
+				},
+			},
+			ruff = {
+				trace = "messages",
+				init_options = {
+					settings = {
+						logLevel = "debug",
+					},
+				},
+			},
 			lua_ls = {
 				settings = {
 					Lua = {
@@ -60,11 +78,12 @@ return {
 
 		local ensure_installed = vim.tbl_keys(servers or {})
 		vim.list_extend(ensure_installed, {
+			"ts_ls",
+			"eslint",
+			"html",
+			"cssls",
 			"stylua",
-			"autopep8",
-			"isort",
-			"black",
-			"ruff",
+			"gopls",
 		})
 		require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
