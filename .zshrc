@@ -14,22 +14,22 @@ if [ ! -d "$ZINIT_HOME" ]; then
    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 source "${ZINIT_HOME}/zinit.zsh"
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 
-autoload -Uz compinit && compinit
+autoload -U compinit && compinit
 zinit cdreplay -q
 
-bindkey -v
+bindkey -e
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
 zle_highlight+=(paste:none)
 
 HISTSIZE=5000
-HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
 setopt appendhistory
@@ -42,12 +42,6 @@ setopt hist_find_no_dups
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-# zstyle ':completion:*' menu no
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-# zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
-
-# eval "$(fzf --zsh)"
-# eval "$(zoxide init --cmd cd zsh)"
 
 if command -v tmux &> /dev/null \
     && [ -n "$PS1" ] \
@@ -56,36 +50,3 @@ if command -v tmux &> /dev/null \
     && [ -z "$TMUX" ]; then
   exec tmux
 fi
-
-cntnt() {
-    local targets=("$@")
-
-    local target_paths=()
-    local ignore_patterns=()
-    local processing_ignores=false
-
-    for arg in "${targets[@]}"; do
-        if [[ "$arg" == "--ignore" ]]; then
-            processing_ignores=true
-            continue
-        fi
-
-        if $processing_ignores; then
-            ignore_patterns+=("$arg")
-        else
-            target_paths+=("$arg")
-        fi
-    done
-
-    local find_command=(find)
-    for p in "${target_paths[@]}"; do
-        find_command+=("$p")
-    done
-    find_command+=("-type" "f")
-
-    for pattern in "${ignore_patterns[@]}"; do
-        find_command+=("-not" "-path" "$pattern")
-    done
-
-    "${find_command[@]}" -exec sh -c 'echo "=== {} ==="; cat "{}"; echo "\n\n"' \; > ./cntnt.txt
-}

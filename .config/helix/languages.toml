@@ -1,0 +1,94 @@
+[[language]]
+name = "python"
+auto-format = true
+indent = { tab-width = 4, unit = "    " }
+language-servers = [ "pyright", "ruff" ]
+
+[language-server.pyright.config.python.analysis]
+typeCheckingMode = "basic"
+diagnosticMode = "workspace"
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
+
+[[language]]
+name = "c"
+indent = { tab-width = 4, unit = "    " }
+language-servers = [ "clangd" ]
+
+
+[[language]]
+name = "typescript"
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server", "emmet-ls" ]
+formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
+auto-format = true
+
+[[language]]
+name = "tsx"
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server", "emmet-ls" ]
+formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
+auto-format = true
+
+[[language]]
+name = "javascript"
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server", "emmet-ls" ]
+formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
+auto-format = true
+
+[[language]]
+name = "jsx"
+language-servers = [ "typescript-language-server", "vscode-eslint-language-server", "emmet-ls" ]
+formatter = { command = "prettier", args = [ "--parser", "typescript" ] }
+auto-format = true
+
+[[language]]
+name = "json"
+formatter = { command = "prettier", args = [ "--parser", "json" ] }
+auto-format = true
+
+[[language]]
+name = "html"
+language-servers = [ "vscode-html-language-server", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "html"] }
+auto-format = true
+
+[[language]]
+name = "css"
+language-servers = [ "vscode-css-language-server", "emmet-ls" ]
+formatter = { command = 'prettier', args = ["--parser", "css"] }
+auto-format = true
+
+[language-server.emmet-ls]
+command = "emmet-ls"
+args = [ "--stdio" ]
+
+[language-server.vscode-eslint-language-server]
+command = "vscode-vscode-eslint-language-server-language-server"
+args = ["--stdio"]
+
+[language-server.vscode-eslint-language-server.config]
+codeActionsOnSave = { mode = "all", "source.fixAll.vscode-eslint-language-server" = true }
+format = { enable = true }
+nodePath = ""
+quiet = false
+rulesCustomizations = []
+run = "onType"
+validate = "on"
+experimental = {}
+problems = { shortenToSingleLine = false }
+
+[language-server.vscode-eslint-language-server.config.codeAction]
+disableRuleComment = { enable = true, location = "separateLine" }
+showDocumentation = { enable = false }
+
+[language-server.vscode-json-language-server.config]
+json = { validate = { enable = true }, format = { enable = true } }
+provideFormatter = true
+
+[language-server.vscode-css-language-server.config]
+css = { validate = { enable = true } }
+scss = { validate = { enable = true } }
+less = { validate = { enable = true } }
+provideFormatter = true
