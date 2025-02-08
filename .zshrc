@@ -23,10 +23,6 @@ zinit light zsh-users/zsh-autosuggestions
 autoload -U compinit && compinit
 zinit cdreplay -q
 
-bindkey -e
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
-
 zle_highlight+=(paste:none)
 
 HISTSIZE=5000
@@ -42,11 +38,3 @@ setopt hist_find_no_dups
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-
-if command -v tmux &> /dev/null \
-    && [ -n "$PS1" ] \
-    && [[ ! "$TERM" =~ screen ]] \
-    && [[ ! "$TERM" =~ tmux ]] \
-    && [ -z "$TMUX" ]; then
-  exec tmux
-fi

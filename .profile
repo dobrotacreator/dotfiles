@@ -1,15 +1,5 @@
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export PATH="$PATH:/usr/local/go/bin"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
 
 alias ls='ls --color'
 alias c='clear'

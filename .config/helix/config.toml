@@ -1,6 +1,7 @@
-theme = "yo_berry_dark"
+theme = "gigagold"
 
 [editor]
+clipboard-provider = "pasteboard"
 true-color = true
 cursorline = true
 color-modes = true
@@ -16,20 +17,20 @@ left = ["mode", "spinner", "version-control", "file-modification-indicator"]
 center = ["file-name"]
 right = ["diagnostics", "selections", "total-line-numbers", "position", "file-encoding", "file-line-ending", "file-type"]
 
-[editor.cursor-shape]
-insert = "bar"
-normal = "block"
-select = "underline"
-
 [editor.file-picker]
 hidden = false
 git-ignore = false
 
 [editor.whitespace.render]
+space = "all"
 tab = "all"
+nbsp = "none"
+nnbsp = "none"
+newline = "none"
 
 [editor.whitespace.characters]
 tab = "→"
+space = "·"
 tabpad = "·" # Tabs will look like "→···" (depending on tab width)
 
 [editor.indent-guides]
@@ -46,7 +47,19 @@ wrap-indicator = ""  # set wrap-indicator to "" to hide it
 [keys.normal]
 X = ["extend_line_up", "extend_to_line_bounds"]
 A-x = "extend_to_line_bounds"
+A-w = 'move_next_sub_word_start'
+A-b = 'move_prev_sub_word_start'
+A-e = 'move_next_sub_word_end'
+
+[keys.normal."space"]
+A-f = "file_picker_in_current_buffer_directory"
 
 [keys.select]
 X = ["extend_line_up", "extend_to_line_bounds"]
 A-x = "extend_to_line_bounds"
+A-w = 'extend_next_sub_word_start'
+A-b = 'extend_prev_sub_word_start'
+A-e = 'extend_next_sub_word_end'
+
+[keys.select."space"]
+A-f = "file_picker_in_current_buffer_directory"
