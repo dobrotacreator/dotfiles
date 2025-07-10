@@ -3,6 +3,9 @@ export PATH="$PATH:/usr/local/go/bin"
 
 alias ls='ls --color'
 alias c='clear'
+alias d='docker'
+alias dup='docker compose up --build'
+alias dex='docker compose exec'
 alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -la'
