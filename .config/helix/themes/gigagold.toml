@@ -58,6 +58,7 @@ error = { fg = "error", modifiers = ["bold"] }
 info = { fg = "info", modifiers = ["bold"] }
 hint = { fg = "info", modifiers = ["bold"] }
 
+"diagnostic" = { underline = { color = "warning", style = "curl" } }
 "diagnostic.hint" = { fg = "info", modifiers = ["bold"] }
 "diagnostic.info" = { fg = "info", modifiers = ["bold"] }
 "diagnostic.warning" = { fg = "warning", modifiers = ["bold"] }
