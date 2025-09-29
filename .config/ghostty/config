@@ -1,0 +1,13 @@
+background = #202020
+
+font-size = 20.0
+font-family = RobotoMono Nerd Font
+font-style = Medium
+font-thicken = true
+
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+
+window-save-state = always

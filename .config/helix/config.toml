@@ -7,10 +7,15 @@ cursorline = true
 color-modes = true
 line-number = "relative"
 rulers = [80]
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
 
 [editor.lsp]
-auto-signature-help = false
+auto-signature-help = true
 display-messages = true
+display-progress-messages = true
 
 [editor.statusline]
 left = ["mode", "spinner", "version-control", "file-modification-indicator"]
