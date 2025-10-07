@@ -21,12 +21,13 @@ autoload -Uz vcs_info
 precmd_functions+=(vcs_info)
 setopt prompt_subst
 zstyle ':vcs_info:*' formats ' %F{white}[%b]%f%c%u '
-zstyle ':vcs_info:*' actionformats '%F{yellow}[%b|%a]%f%c%u'
+zstyle ':vcs_info:*' actionformats ' %F{yellow}[%b|%a]%f%c%u '
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' stagedstr '%F{green}●%f'
 zstyle ':vcs_info:*' unstagedstr '%F{red}✗%f'
 zstyle ':vcs_info:*' actionstr '%F{magenta}▰%f'
-PROMPT='%F{cyan}%n@%m%f:%F{blue}%~%f${vcs_info_msg_0_}$ '
+NEWLINE=$'\n'
+PROMPT='╭%F{cyan}%n@%m%f:%F{blue}%~%f${vcs_info_msg_0_}${NEWLINE}╰$ '
 
 HISTSIZE=10000
 SAVEHIST=$HISTSIZE
