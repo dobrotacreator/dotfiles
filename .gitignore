@@ -1,3 +1,4 @@
 .DS_Store
 .work
 .config/raycast/extensions/node_modules
+.config/vpn/
