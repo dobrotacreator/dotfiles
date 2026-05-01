@@ -1,0 +1,39 @@
+#!/usr/bin/env sh
+set -eu
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
+BREWFILE="$DOTFILES_DIR/.Brewfile"
+MACOS_DEFAULTS="$DOTFILES_DIR/scripts/macos-defaults.sh"
+
+if [ ! -d "$DOTFILES_DIR" ]; then
+  echo "dotfiles directory not found: $DOTFILES_DIR" >&2
+  exit 1
+fi
+
+if [ ! -f "$BREWFILE" ]; then
+  echo "Brewfile not found: $BREWFILE" >&2
+  exit 1
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew is not installed." >&2
+  echo "Install it from https://brew.sh, then rerun this script." >&2
+  exit 1
+fi
+
+if [ -x /opt/homebrew/bin/brew ]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+brew bundle --no-upgrade --file "$BREWFILE"
+
+cd "$DOTFILES_DIR"
+stow .
+
+if [ -x "$MACOS_DEFAULTS" ]; then
+  printf "Run macOS defaults? [y/N] "
+  read -r answer
+  case "$answer" in
+    y|Y) "$MACOS_DEFAULTS" ;;
+  esac
+fi
