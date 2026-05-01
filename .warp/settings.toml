@@ -1,0 +1,82 @@
+[appearance]
+
+[appearance.themes]
+system_theme = true
+theme = "gruvbox_dark"
+selected_system_themes = { dark = "gruvbox_dark", light = "gruvbox_light" }
+
+[appearance.vertical_tabs]
+enabled = true
+display_granularity = "tabs"
+view_mode = "expanded"
+primary_info = "command"
+
+[appearance.text]
+notebook_font_size = 14.0
+font_size = 13.0
+font_name = "Hack"
+match_ai_font = true
+ai_font_name = "Hack"
+
+[appearance.icon]
+app_icon = "default"
+
+[appearance.tabs]
+workspace_decoration_visibility = "always_show"
+
+[terminal]
+
+[terminal.input]
+input_box_type_setting = "universal"
+honor_ps1 = false
+alias_expansion_enabled = true
+
+[agents]
+cloud_conversation_storage_enabled = true
+
+[agents.warp_agent]
+is_any_ai_enabled = false
+
+[agents.warp_agent.input]
+nld_in_terminal_enabled = false
+
+[agents.warp_agent.other]
+show_agent_notifications = true
+show_conversation_history = true
+
+[agents.third_party]
+should_render_cli_agent_toolbar = true
+
+[agents.third_party.cli_agent_toolbar_chip_selection_setting]
+
+[agents.third_party.cli_agent_toolbar_chip_selection_setting.custom]
+left = [{ context_chip = "git_diff_stats" }, "rich_input"]
+right = [
+  { context_chip = "working_directory" },
+  { context_chip = "shell_git_branch" },
+  { context_chip = "github_pull_request" },
+]
+
+[account]
+is_settings_sync_enabled = true
+
+[general]
+default_session_mode = "terminal"
+
+[code]
+
+[code.editor]
+show_code_review_button = true
+show_project_explorer = true
+show_global_search = true
+open_file_editor = "warp"
+
+[warp_drive]
+enabled = false
+
+[privacy]
+telemetry_enabled = true
+crash_reporting_enabled = true
+
+[notifications]
+toast_duration_secs = 8
