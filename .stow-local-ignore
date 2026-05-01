@@ -1,0 +1,7 @@
+# Repository metadata and documentation.
+^README\.md$
+^\.git$
+^\.gitignore$
+
+# Helper scripts are not installed into $HOME by Stow.
+^scripts$
