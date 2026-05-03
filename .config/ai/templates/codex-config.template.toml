@@ -1,0 +1,30 @@
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
+personality = "pragmatic"
+approvals_reviewer = "user"
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+suppress_unstable_features_warning = true
+
+[projects."/"]
+trust_level = "trusted"
+
+[tui]
+notification_condition = "always"
+theme = "gruvbox-dark"
+status_line = [
+  "model-with-reasoning",
+  "current-dir",
+  "context-used",
+]
+
+[features]
+goals = true
+
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp"]
+
+[mcp_servers.code-review-graph]
+command = "uvx"
+args = ["code-review-graph", "serve"]
