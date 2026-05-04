@@ -26,42 +26,47 @@ block() {
   exit 2
 }
 
-SEP='(^|[;&|]+\s*)'
+SEP='(^|[;&|]+[[:space:]]*)'
+GIT_GLOBAL_OPTS='([[:space:]]+(-C|-c)[[:space:]]+[^[:space:];&|]+|[[:space:]]+(--git-dir|--work-tree|--namespace|--exec-path)(=|[[:space:]]+)[^[:space:];&|]+|[[:space:]]+--(bare|no-pager|paginate|no-replace-objects|literal-pathspecs|glob-pathspecs|noglob-pathspecs|icase-pathspecs|no-optional-locks))*'
+
+git_cmd_re() {
+  printf '%s%s%s[[:space:]]+%s([[:space:]]|$)' "$SEP" "git" "$GIT_GLOBAL_OPTS" "$1"
+}
 
 if [[ -n "$cmd" ]]; then
-  echo "$cmd" | grep -qE "${SEP}git\s+push(\s|$)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'push')" \
     && block "git push - modifies the remote repository"
 
-  echo "$cmd" | grep -qE "${SEP}git\s+reset\s+--hard" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'reset[[:space:]]+--hard')" \
     && block "git reset --hard - discards all uncommitted changes"
-  echo "$cmd" | grep -qE "${SEP}git\s+checkout\s+--\s" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'checkout[[:space:]]+--')" \
     && block "git checkout -- - discards working tree changes"
-  echo "$cmd" | grep -qE "${SEP}git\s+restore\s+[^-]*(\.|\*)(\s|$)" \
-    && ! echo "$cmd" | grep -qE "git\s+restore\s+--staged" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'restore[[:space:]]+[^-]*(\.|\*)')" \
+    && ! echo "$cmd" | grep -qE "$(git_cmd_re 'restore[[:space:]]+--staged')" \
     && block "git restore - bulk discards changes"
-  echo "$cmd" | grep -qE "${SEP}git\s+clean\s+-[a-zA-Z]*f" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'clean[[:space:]]+-[a-zA-Z]*f')" \
     && block "git clean -f - removes untracked files permanently"
-  echo "$cmd" | grep -qE "${SEP}git\s+branch\s+.*-D(\s|$)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'branch[[:space:]]+.*-D')" \
     && block "git branch -D - force-deletes branch without merge check"
-  echo "$cmd" | grep -qE "${SEP}git\s+stash\s+(drop|clear)(\s|$)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'stash[[:space:]]+(drop|clear)')" \
     && block "git stash drop/clear - permanently discards stashed work"
 
-  echo "$cmd" | grep -qE "${SEP}git\s+rebase(\s|$)" \
-    && ! echo "$cmd" | grep -qE "git\s+rebase\s+--(abort|continue|skip)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'rebase')" \
+    && ! echo "$cmd" | grep -qE "$(git_cmd_re 'rebase[[:space:]]+--(abort|continue|skip)')" \
     && block "git rebase - rewrites commit history"
-  echo "$cmd" | grep -qE "${SEP}git\s+merge(\s|$)" \
-    && ! echo "$cmd" | grep -qE "git\s+merge\s+--abort" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'merge')" \
+    && ! echo "$cmd" | grep -qE "$(git_cmd_re 'merge[[:space:]]+--abort')" \
     && block "git merge - use pull requests instead"
-  echo "$cmd" | grep -qE "${SEP}git\s+commit\s.*--amend" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'commit[[:space:]].*--amend')" \
     && block "git commit --amend - rewrites the last commit"
 
-  echo "$cmd" | grep -qE "${SEP}git\s+remote\s+(add|remove|rm|set-url|rename)(\s|$)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'remote[[:space:]]+(add|remove|rm|set-url|rename)')" \
     && block "git remote modification - alters remote configuration"
-  echo "$cmd" | grep -qE "${SEP}git\s+tag\s+(-d|--delete)(\s|$)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'tag[[:space:]]+(-d|--delete)')" \
     && block "git tag delete - removes tags"
-  echo "$cmd" | grep -qE "${SEP}git\s+fetch\s+.*--prune" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'fetch[[:space:]].*--prune')" \
     && block "git fetch --prune - deletes remote-tracking branches"
-  echo "$cmd" | grep -qE "${SEP}git\s+commit\s.*(-n\s|--no-verify)" \
+  echo "$cmd" | grep -qE "$(git_cmd_re 'commit[[:space:]].*(-n|--no-verify)')" \
     && block "git commit --no-verify - bypasses pre-commit hooks"
 
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+merge(\s|$)" \
