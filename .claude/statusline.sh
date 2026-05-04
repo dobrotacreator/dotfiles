@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -39,6 +40,38 @@ def shorten_path(path):
     return path
 
 
+def git_output(cwd, *args):
+    if not cwd:
+        return None
+
+    try:
+        result = subprocess.run(
+            ["git", "-C", cwd, *args],
+            capture_output=True,
+            text=True,
+            timeout=0.5,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+    if result.returncode != 0:
+        return None
+
+    output = result.stdout.strip()
+    return output or None
+
+
+def git_branch(cwd):
+    if git_output(cwd, "rev-parse", "--is-inside-work-tree") != "true":
+        return None
+
+    return (
+        git_output(cwd, "symbolic-ref", "--quiet", "--short", "HEAD")
+        or git_output(cwd, "rev-parse", "--short", "HEAD")
+    )
+
+
 def context_tokens(context):
     usage = context.get("current_usage") or {}
     if usage:
@@ -67,6 +100,8 @@ def main():
     workspace = data.get("workspace") or {}
     cwd = workspace.get("current_dir") or data.get("cwd")
     cwd_part = shorten_path(cwd)
+    git = git_branch(cwd)
+    git_part = f" | git {git}" if git else ""
 
     context = data.get("context_window") or {}
     used = context.get("used_percentage")
@@ -85,7 +120,7 @@ def main():
     elif compact_window:
         token_part = f" (/{compact_window})"
 
-    print(f"{model_part} | ctx {used_part} used{token_part}")
+    print(f"{model_part}{git_part} | ctx {used_part} used{token_part}")
     print(cwd_part)
 
 
