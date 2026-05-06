@@ -34,8 +34,11 @@ git_cmd_re() {
 }
 
 if [[ -n "$cmd" ]]; then
-  echo "$cmd" | grep -qE "$(git_cmd_re 'push')" \
-    && block "git push - modifies the remote repository"
+  # Regular `git push` is allowed; only force pushes (rewrite remote history) are blocked.
+  if echo "$cmd" | grep -qE "$(git_cmd_re 'push')"; then
+    echo "$cmd" | grep -qE '(--force(-with-lease|-if-includes)?([[:space:]]|=|$)|[[:space:]]-[a-zA-Z]*f[a-zA-Z]*([[:space:]]|$))' \
+      && block "git push --force/-f - rewrites remote history"
+  fi
 
   echo "$cmd" | grep -qE "$(git_cmd_re 'reset[[:space:]]+--hard')" \
     && block "git reset --hard - discards all uncommitted changes"
@@ -75,12 +78,11 @@ if [[ -n "$cmd" ]]; then
     && block "gh pr close - closes a pull request"
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+(comment|review)(\s|$)" \
     && block "gh pr comment/review - posts visible content on a PR"
-  echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+create(\s|$)" \
-    && block "gh pr create - creates a pull request"
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+(edit|reopen)(\s|$)" \
     && block "gh pr edit/reopen - modifies a pull request"
 
-  echo "$cmd" | grep -qE "${SEP}gh\s+issue\s+(create|close|comment|edit|reopen|delete|transfer|pin|unpin)(\s|$)" \
+  # `gh issue create` and `gh pr create` are allowed; mutating ops on existing items remain blocked.
+  echo "$cmd" | grep -qE "${SEP}gh\s+issue\s+(close|comment|edit|reopen|delete|transfer|pin|unpin)(\s|$)" \
     && block "gh issue write operation - modifies GitHub issues"
   echo "$cmd" | grep -qE "${SEP}gh\s+repo\s+(delete|archive|rename|edit)(\s|$)" \
     && block "gh repo destructive operation"
@@ -208,12 +210,10 @@ if [[ -n "$tool_name" ]] && [[ "$tool_name" == mcp__* ]]; then
 
   tool_lower=$(echo "$tool_name" | tr '[:upper:]' '[:lower:]')
   case "$tool_lower" in
-    *push*|*force_push*) block "MCP push operation '$tool_name'" ;;
+    *force_push*) block "MCP force-push operation '$tool_name'" ;;
     *merge*|*squash*|*rebase*) block "MCP merge operation '$tool_name'" ;;
     *delete_file*|*delete_branch*|*delete_repo*|*delete_release*|*delete_ref*) block "MCP delete operation '$tool_name'" ;;
     *close_issue*|*close_pull*|*close_pr*) block "MCP close operation '$tool_name'" ;;
-    *create_pull*|*create_pr*|*open_pull*) block "MCP create PR '$tool_name'" ;;
-    *create_issue*|*open_issue*) block "MCP create issue '$tool_name'" ;;
     *create_release*|*publish_release*) block "MCP release operation '$tool_name'" ;;
     *comment*|*review*|*approve*) block "MCP comment/review '$tool_name'" ;;
     *create_or_update_file*|*update_file*|*create_file*) block "MCP file write '$tool_name'" ;;
