@@ -1,4 +1,4 @@
-[[ -r ~/.profile ]] && emulate sh -c 'source ~/.profile'
+[[ -r ~/.profile ]] && source ~/.profile
 
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
@@ -57,7 +57,7 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
-bindkey "^[^P" history-beginning-search-backward
-bindkey "^[^N" history-beginning-search-forward
+bindkey "${terminfo[kcuu1]}" history-beginning-search-backward
+bindkey "${terminfo[kcud1]}" history-beginning-search-forward
 
 zle_highlight+=(paste:none)
