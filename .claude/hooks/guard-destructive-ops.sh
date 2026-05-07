@@ -10,7 +10,7 @@ set +e
 # ── Configuration ────────────────────────────────────────────
 # Local-only MCP plugins that never touch remote state.
 # Add your own plugin names (substring match against tool_name).
-MCP_LOCAL_PLUGINS="code-review-graph|context7"
+MCP_LOCAL_PLUGINS="code[-_]review[-_]graph|context7"
 
 # ── Parse input ──────────────────────────────────────────────
 input=$(cat)
@@ -239,8 +239,10 @@ if [[ -n "$tool_name" ]] && [[ "$tool_name" == mcp__* ]]; then
   fi
 
   tool_lower=$(echo "$tool_name" | tr '[:upper:]' '[:lower:]')
+  mcp_action="$tool_lower"
+  [[ "$mcp_action" == mcp__*__* ]] && mcp_action="${mcp_action##*__}"
 
-  case "$tool_lower" in
+  case "$mcp_action" in
     *force_push*)
       block "MCP force-push operation '$tool_name'" ;;
     *merge*|*squash*|*rebase*)
@@ -259,7 +261,7 @@ if [[ -n "$tool_name" ]] && [[ "$tool_name" == mcp__* ]]; then
       block "MCP repo operation '$tool_name'" ;;
     *dispatch*|*trigger*|*workflow_run*)
       block "MCP workflow trigger '$tool_name'" ;;
-    *add_label*|*remove_label*|*assign*|*unassign*|*set_*|*update_branch*)
+    *add_label*|*remove_label*|*assign*|*set_*|*update_branch*)
       block "MCP metadata operation '$tool_name'" ;;
   esac
 fi

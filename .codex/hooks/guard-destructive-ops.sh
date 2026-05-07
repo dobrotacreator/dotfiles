@@ -3,7 +3,7 @@
 
 set +e
 
-MCP_LOCAL_PLUGINS="code-review-graph|context7"
+MCP_LOCAL_PLUGINS="code[-_]review[-_]graph|context7"
 
 input=$(cat)
 tool_name=$(echo "$input" | jq -r '.tool_name // .toolName // .tool // .name // empty' 2>/dev/null || true)
@@ -210,7 +210,10 @@ if [[ -n "$tool_name" ]] && [[ "$tool_name" == mcp__* ]]; then
   fi
 
   tool_lower=$(echo "$tool_name" | tr '[:upper:]' '[:lower:]')
-  case "$tool_lower" in
+  mcp_action="$tool_lower"
+  [[ "$mcp_action" == mcp__*__* ]] && mcp_action="${mcp_action##*__}"
+
+  case "$mcp_action" in
     *force_push*) block "MCP force-push operation '$tool_name'" ;;
     *merge*|*squash*|*rebase*) block "MCP merge operation '$tool_name'" ;;
     *delete_file*|*delete_branch*|*delete_repo*|*delete_release*|*delete_ref*) block "MCP delete operation '$tool_name'" ;;
@@ -220,7 +223,7 @@ if [[ -n "$tool_name" ]] && [[ "$tool_name" == mcp__* ]]; then
     *create_or_update_file*|*update_file*|*create_file*) block "MCP file write '$tool_name'" ;;
     *fork*|*transfer*|*archive*|*rename_repo*) block "MCP repo operation '$tool_name'" ;;
     *dispatch*|*trigger*|*workflow_run*) block "MCP workflow trigger '$tool_name'" ;;
-    *add_label*|*remove_label*|*assign*|*unassign*|*set_*|*update_branch*) block "MCP metadata operation '$tool_name'" ;;
+    *add_label*|*remove_label*|*assign*|*set_*|*update_branch*) block "MCP metadata operation '$tool_name'" ;;
   esac
 fi
 
