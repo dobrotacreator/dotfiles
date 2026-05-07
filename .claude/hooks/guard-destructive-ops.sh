@@ -83,14 +83,15 @@ if [[ -n "$cmd" ]]; then
     && block "gh pr merge — merges a pull request"
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+close(\s|$)" \
     && block "gh pr close — closes a pull request"
-  echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+(comment|review)(\s|$)" \
-    && block "gh pr comment/review — posts visible content on a PR"
+  echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+review(\s|$)" \
+    && block "gh pr review — may approve/request-changes; use 'gh pr comment' for plain comments"
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+(edit|reopen)(\s|$)" \
     && block "gh pr edit/reopen — modifies a pull request"
 
   # ── GitHub CLI: issues, repos, releases ───────────────────
-  # `gh issue create` and `gh pr create` are allowed; mutating ops on existing items remain blocked.
-  echo "$cmd" | grep -qE "${SEP}gh\s+issue\s+(close|comment|edit|reopen|delete|transfer|pin|unpin)(\s|$)" \
+  # `gh issue create`, `gh pr create`, and plain `comment` ops are allowed;
+  # other mutating ops on existing items remain blocked.
+  echo "$cmd" | grep -qE "${SEP}gh\s+issue\s+(close|edit|reopen|delete|transfer|pin|unpin)(\s|$)" \
     && block "gh issue write operation — modifies GitHub issues"
   echo "$cmd" | grep -qE "${SEP}gh\s+repo\s+(delete|archive|rename|edit)(\s|$)" \
     && block "gh repo destructive operation"
