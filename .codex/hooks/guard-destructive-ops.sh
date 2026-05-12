@@ -76,8 +76,12 @@ if [[ -n "$cmd" ]]; then
     && block "gh pr merge - merges a pull request"
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+close(\s|$)" \
     && block "gh pr close - closes a pull request"
-  echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+review(\s|$)" \
-    && block "gh pr review - may approve/request-changes; use 'gh pr comment' for plain comments"
+  # `gh pr review --comment` is a plain comment-only review and is allowed;
+  # only state-changing reviews (approve/request-changes) must be manual.
+  if echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+review(\s|$)"; then
+    echo "$cmd" | grep -qE '(\s)(-a|-r|--approve|--request-changes)(\s|=|$)' \
+      && block "gh pr review --approve/--request-changes - must be manual"
+  fi
   echo "$cmd" | grep -qE "${SEP}gh\s+pr\s+(edit|reopen)(\s|$)" \
     && block "gh pr edit/reopen - modifies a pull request"
 
@@ -93,8 +97,19 @@ if [[ -n "$cmd" ]]; then
     && block "gh label/variable/secret modification"
 
   if echo "$cmd" | grep -qE "${SEP}gh\s+api\s"; then
-    echo "$cmd" | grep -qE '(-X|--method)\s+(POST|PUT|PATCH|DELETE)' \
-      && block "gh api with write method - modifies GitHub state"
+    if echo "$cmd" | grep -qE '(-X|--method)\s+(POST|PUT|PATCH|DELETE)'; then
+      # Allow POST to comment-only endpoints:
+      #   repos/{o}/{r}/pulls/{n}/reviews                       - review w/ inline comments
+      #   repos/{o}/{r}/pulls/{n}/comments                      - standalone review comment
+      #   repos/{o}/{r}/pulls/{n}/comments/{id}/replies         - reply to a review comment
+      #   repos/{o}/{r}/issues/{n}/comments                     - issue/PR-level comment
+      if echo "$cmd" | grep -qE '(-X|--method)\s+POST' \
+         && echo "$cmd" | grep -qE 'repos/[^/[:space:]]+/[^/[:space:]]+/(pulls/[0-9]+/(reviews|comments(/[0-9]+/replies)?)|issues/[0-9]+/comments)([[:space:]"'\'']|$)'; then
+        :
+      else
+        block "gh api with write method - modifies GitHub state"
+      fi
+    fi
   fi
   echo "$cmd" | grep -qE "${SEP}gh\s+workflow\s+run(\s|$)" \
     && block "gh workflow run - triggers a GitHub Actions workflow"
