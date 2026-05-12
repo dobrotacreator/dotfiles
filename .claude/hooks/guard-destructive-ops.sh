@@ -132,16 +132,20 @@ if [[ -n "$cmd" ]]; then
     && block "file truncation with > — verify target file"
 
   # ── Database destructive operations ───────────────────────
-  echo "$cmd" | grep -qiE "(dropdb|DROP\s+(DATABASE|TABLE|SCHEMA))" \
+  echo "$cmd" | grep -qiE "${SEP}dropdb([[:space:]]|$)" \
     && block "database drop operation — destroys data permanently"
-  echo "$cmd" | grep -qiE "TRUNCATE\s+" \
-    && block "TRUNCATE — deletes all rows permanently"
-  echo "$cmd" | grep -qiE "DELETE\s+FROM\s+\w+\s*$" \
-    && block "DELETE without WHERE — deletes all rows"
-  echo "$cmd" | grep -qiE "ALTER\s+TABLE\s+.*\bDROP\b" \
-    && block "ALTER TABLE DROP — removes columns/constraints"
-  echo "$cmd" | grep -qE "${SEP}(psql|mysql|mongosh?|redis-cli)\s.*(-c|-e|--eval)\s" \
-    && block "database CLI with inline command — verify before executing"
+
+  if echo "$cmd" | grep -qE "${SEP}(psql|mysql|mongosh?|redis-cli)\s.*(-c|-e|--eval)\s"; then
+    echo "$cmd" | grep -qiE "DROP\s+(DATABASE|TABLE|SCHEMA)" \
+      && block "database drop operation — destroys data permanently"
+    echo "$cmd" | grep -qiE "TRUNCATE\s+" \
+      && block "TRUNCATE — deletes all rows permanently"
+    echo "$cmd" | grep -qiE "DELETE\s+FROM\s+\w+\s*$" \
+      && block "DELETE without WHERE — deletes all rows"
+    echo "$cmd" | grep -qiE "ALTER\s+TABLE\s+.*\bDROP\b" \
+      && block "ALTER TABLE DROP — removes columns/constraints"
+    block "database CLI with inline command — verify before executing"
+  fi
 
   # ── Docker ────────────────────────────────────────────────
   echo "$cmd" | grep -qE "${SEP}docker\s+(system\s+prune|container\s+rm|image\s+rm|volume\s+rm)" \
