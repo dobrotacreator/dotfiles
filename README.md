@@ -35,6 +35,8 @@ Portable Claude Code hooks are kept in `.claude/hooks/`.
 The Claude Code status line script is kept in `.claude/statusline.sh`.
 Portable Codex hooks are kept in `.codex/hooks/`, with `.codex/hooks.json`
 enabling the destructive-op guard.
+The shared destructive-op guard implementation is kept in
+`scripts/guard-destructive-ops.sh`.
 
 Agent runtime settings that contain local state, such as `~/.codex/config.toml`
 and `~/.claude/settings.json`, are kept live-local.
