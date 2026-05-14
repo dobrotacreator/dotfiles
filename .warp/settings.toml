@@ -14,9 +14,9 @@ primary_info = "command"
 [appearance.text]
 notebook_font_size = 14.0
 font_size = 13.0
-font_name = "Hack"
+font_name = "RobotoMono Nerd Font Medium"
 match_ai_font = true
-ai_font_name = "Hack"
+ai_font_name = "RobotoMono Nerd Font Medium"
 
 [appearance.icon]
 app_icon = "default"
