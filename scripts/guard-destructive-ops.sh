@@ -29,7 +29,6 @@ block() {
 SEP='(^|[;&|]+[[:space:]]*)'
 GIT_BIN='(rtk[[:space:]]+)?git'
 GIT_GLOBAL_OPTS='([[:space:]]+(-C|-c)[[:space:]]+[^[:space:];&|]+|[[:space:]]+(--git-dir|--work-tree|--namespace|--exec-path)(=|[[:space:]]+)[^[:space:];&|]+|[[:space:]]+--(bare|no-pager|paginate|no-replace-objects|literal-pathspecs|glob-pathspecs|noglob-pathspecs|icase-pathspecs|no-optional-locks))*'
-ORIGIN_REF="(^|[[:space:];&|=\"'])((refs/remotes/|remotes/)?origin(/|[[:space:];&|\"']|$))"
 
 git_cmd_re() {
   printf '%s%s%s[[:space:]]+%s([[:space:]]|$)' "$SEP" "$GIT_BIN" "$GIT_GLOBAL_OPTS" "$1"
@@ -56,17 +55,6 @@ if [[ -n "$cmd" ]]; then
   echo "$cmd" | grep -qE "$(git_cmd_re 'stash[[:space:]]+(drop|clear)')" \
     && block "git stash drop/clear - permanently discards stashed work"
 
-  echo "$cmd" | grep -qE "$(git_cmd_re 'rebase')" \
-    && ! echo "$cmd" | grep -qE "$(git_cmd_re 'rebase[[:space:]]+--(abort|continue|skip)')" \
-    && echo "$cmd" | grep -qE "$ORIGIN_REF" \
-    && block "git rebase against origin refs - use local branches"
-  echo "$cmd" | grep -qE "$(git_cmd_re 'merge')" \
-    && ! echo "$cmd" | grep -qE "$(git_cmd_re 'merge[[:space:]]+--abort')" \
-    && echo "$cmd" | grep -qE "$ORIGIN_REF" \
-    && block "git merge from origin refs - use local branches"
-  echo "$cmd" | grep -qE "$(git_cmd_re 'pull')" \
-    && echo "$cmd" | grep -qE "$ORIGIN_REF" \
-    && block "git pull from origin - fetch and merge/rebase local branches explicitly"
   echo "$cmd" | grep -qE "$(git_cmd_re 'commit[[:space:]].*--amend')" \
     && block "git commit --amend - rewrites the last commit"
 
